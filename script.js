@@ -23,30 +23,7 @@ const proposition = document.getElementById("proposition");
 const ideeForm = document.querySelector("form");
 
 tableau_idee.forEach((idees)=>{
-
-    const divcard = document.createElement("div")
-
-    divcard.classList.add("card")
-    divcard.classList.add("m-2")
-    divcard.style.width = "18rem"
-    divcard.style.border = "2px solid red"
-
-    const divCardBody = document.createElement("div")
-    divCardBody.classList.add("card-body")
-
-    const cardTitle = document.createElement("h5")
-    cardTitle.classList.add("card-title")
-
-    const cardDescription = document.createElement("p")
-    cardDescription.classList.add("card-text")
-
-    cardTitle.textContent = idees.titre
-    cardDescription.textContent = idees.description
-
-    divCardBody.appendChild(cardTitle)
-    divCardBody.appendChild(cardDescription)
-    divcard.appendChild(divCardBody)
-    proposition.appendChild(divcard)
+    creerCarte(idees)
 })
 
 
@@ -61,7 +38,7 @@ ideeForm.addEventListener("submit", (event) => {
     const descriptionSaisi = inputDescription.value
 
     // Mettre les informations sous forme
-    const nouvelleIdee = {
+    let nouvelleIdee = {
         id : 4,
         titre : titreSaisi,
         description : descriptionSaisi,
@@ -76,6 +53,10 @@ ideeForm.addEventListener("submit", (event) => {
     inputDescription.value = ""
 
     // Ajout de la nouvelle idée dans la page
+    creerCarte(nouvelleIdee)
+})
+
+function creerCarte(donnee){
     const divcard = document.createElement("div")
 
     divcard.classList.add("card")
@@ -91,12 +72,11 @@ ideeForm.addEventListener("submit", (event) => {
     const cardDescription = document.createElement("p")
     cardDescription.classList.add("card-text")
 
-    cardTitle.textContent = idees.titre
-    cardDescription.textContent = idees.description
+    cardTitle.textContent = donnee.titre
+    cardDescription.textContent = donnee.description
 
     divCardBody.appendChild(cardTitle)
     divCardBody.appendChild(cardDescription)
     divcard.appendChild(divCardBody)
     proposition.appendChild(divcard)
-
-})
+}

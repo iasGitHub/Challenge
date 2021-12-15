@@ -17,13 +17,19 @@
                     <form action="POST">
                         <div class="mb-3">
                           <label for="titre" class="form-label">Titre</label>
-                          <input type="text" class="form-control" id="titre" aria-describedby="emailHelp">
+                          <input type="text" class="form-control" id="titre" aria-describedby="">
                         </div>
                         <div class="form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="description" style="height: 100px"></textarea>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="description" style="height: 100px">
+                            </textarea>
                             <label for="description">Description</label>
                           </div>
-                        <button type="submit" class="btn btn-danger mt-4 mb-3">valider</button>
+                          <p id="limite-text">
+                              Contenu saisi 
+                              <span></span>
+                          </p>
+                        <button type="submit"
+                            class="btn btn-danger mt-4 mb-3">valider</button>
                       </form>
                 </div>
                 <div class="col-lg-6">
