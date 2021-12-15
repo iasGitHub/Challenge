@@ -18,6 +18,9 @@ const tableau_idee = [
         statut : false
     }
 ];
+const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzOTQxMzY4OSwiZXhwIjoxOTU0OTg5Njg5fQ.eW1mB199JfwekcQ1tbTpY2gwkM5HhxJTYzJMHpDQ1_w"
+const API_URL = "https://msuvueufmlnvyilckwfg.supabase.co/rest/v1/Idées"
+
 
 const proposition = document.getElementById("proposition");
 const ideeForm = document.querySelector("form");
@@ -39,14 +42,23 @@ ideeForm.addEventListener("submit", (event) => {
 
     // Mettre les informations sous forme
     let nouvelleIdee = {
-        id : 4,
         titre : titreSaisi,
         description : descriptionSaisi,
         statut : false
     }
     
     // Ajout
-    tableau_idee.push(nouvelleIdee)
+    //tableau_idee.push(nouvelleIdee)
+
+    // ENVOYER LES DONNÉES VERS API
+    fetch(API_URL, {
+        method: "POST",
+        headers : {
+            apikey : API_KEY,
+            "Content-Type" : "application/json",
+        },
+        body : JSON.stringify(nouvelleIdee),
+    })
 
     // On vide les champs
     inputTitre.value = ""
@@ -56,6 +68,7 @@ ideeForm.addEventListener("submit", (event) => {
     creerCarte(nouvelleIdee)
 })
 
+// fonction pour créer les cartes
 function creerCarte(donnee){
     const divcard = document.createElement("div")
 
@@ -80,3 +93,24 @@ function creerCarte(donnee){
     divcard.appendChild(divCardBody)
     proposition.appendChild(divcard)
 }
+
+// contrôle nombre de caratères textarea
+
+
+//RECUPÉRATION DES DONNÉES VIA API
+window.addEventListener("DOMContentLoaded", (event) => {
+    fetch(API_URL, {
+        method : "GET",
+        headers : {
+            apikey: API_KEY,
+        },
+    })
+    .then((response) => response.json())
+    .then((idees) => {
+      idees.forEach((donnee) => {
+        creerUneCarte(donnee)
+      })
+    })
+})
+
+
