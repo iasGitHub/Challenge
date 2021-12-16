@@ -99,8 +99,8 @@ function creerCarte(donnee){
                       style="font-size: 2rem" id= ${btnApprouver}
                   ></i>
                   <i
-                      class="bi bi-x-circle card-link"
-                      style="font-size: 2rem; color: #ce0033" id = ${btnRefuser}
+                      class="bi bi-x-circle text-danger card-link"
+                      style="font-size: 2rem" id = ${btnRefuser}
                   ></i>
               </div>
           </div>
@@ -110,12 +110,32 @@ function creerCarte(donnee){
     
     const btnValider = document.getElementById(btnApprouver)
     const btnAnnuler = document.getElementById(btnRefuser)
-
+    
+    // Pour modifier le statut lors du click sur le bouton
     btnValider.addEventListener ('click', (event) =>{
-        alert("Bouton success")
+        // recupère l'id
+        fetch(API_URL + "?id=eq." + donnee.id, {
+            method : "PATCH",
+            headers : {
+                apikey : API_KEY,
+                "Content-Type" : "application/json",
+                Prefer: "return=representation"
+            },
+            body : JSON.stringify({statut:true}),
+        })
+        //
     })
+
     btnAnnuler.addEventListener ('click', (event) =>{
-        alert("Bouton annulé")
+        fetch(API_URL + "?id=eq." + donnee.id, {
+            method : "PATCH",
+            headers : {
+                apikey : API_KEY,
+                "Content-Type" : "application/json",
+                Prefer : "return=representation"
+            },
+            body : JSON.stringify({statut:false}),
+        })
     })
 }
 
