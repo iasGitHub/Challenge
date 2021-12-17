@@ -5,6 +5,12 @@ const proposition = document.getElementById("proposition");
 const ideeForm = document.querySelector("form");
 const inputTitre = document.querySelector("input#titre")
 const inputDescription = document.querySelector("textarea#description")
+const listeDesIdees = document.getElementById("listeIdee")
+const ideeApprouvee = document.getElementById("btn-les-approuvees")
+const ideeRefusee = document.getElementById("btn-les-refusees")
+
+
+
 
 /*tableau_idee.forEach((idees)=>{
     creerCarte(idees)
@@ -52,9 +58,8 @@ ideeForm.addEventListener("submit", (event) => {
     creerCarte(nouvelleIdee)
 })
 
-// 
 
-// fonction pour créer les cartes
+// FONCTION POUR CRÉER UNE CARTE
 function creerCarte(donnee){
     // const divcard = document.createElement("div")
     // divcard.classList.add("card")
@@ -78,14 +83,15 @@ function creerCarte(donnee){
     // divcard.appendChild(divCardBody)
     // proposition.appendChild(divcard)
 
-    // Ajout des boutons approuver/refuser lors de la création d'une carte
+    // AJOUT DES BOUTONS APPROUVÉE/REFUSÉE LORS DE LA CRÉATION D'UNE CARTE
     const btnApprouver = "btn-valider" + donnee.id
     const btnRefuser = "btn-reset" + donnee.id
+    const idCardIdee = "numero_card-" + donnee.id
 
     proposition.insertAdjacentHTML(
         "afterbegin",
         `
-      <div class="card me-1" style="width: 18rem">
+      <div class="card card-idea m-2" style="width: 18rem" id="${idCardIdee}">
           <div class="card-body">
               <h5 class="card-title fw-bold">${donnee.titre}</h5>
               <h6 class="card-subtitle mb-2 text-muted">
@@ -111,35 +117,67 @@ function creerCarte(donnee){
     const btnValider = document.getElementById(btnApprouver)
     const btnAnnuler = document.getElementById(btnRefuser)
     
-    // Pour modifier le statut lors du click sur le bouton
-    btnValider.addEventListener ('click', (event) =>{
-        // recupère l'id
+    // POUR MODIFIER LE STATUT LORS DU CLICK
+    btnValider.addEventListener("click", (event) => {
+        //on prend l'id de l'idée
         fetch(API_URL + "?id=eq." + donnee.id, {
-            method : "PATCH",
-            headers : {
-                apikey : API_KEY,
-                "Content-Type" : "application/json",
-                Prefer: "return=representation"
-            },
-            body : JSON.stringify({statut:true}),
+          method: "PATCH",
+          headers: {
+            apikey: API_KEY,
+            "Content-Type": "application/json",
+            Prefer: "return=representation",
+          },
+          body: JSON.stringify({ statut: true }),
         })
-        //
-    })
-
-    btnAnnuler.addEventListener ('click', (event) =>{
+          .then((response) => response.json())
+          .then((data) => {
+            if (data[0].statut === true) {
+              //ON RECUPÈRE LA CARTE
+              const divCard = document.getElementById(idCardIdee)
+              divCard.style.border = "1px solid #198754"
+              btnValider.style.visibility = "hidden"
+              btnAnnuler.style.visibility = "visible"
+    
+              //CHANGER LE TEXT DU H6  APPROUVÉE -> REFUSÉE -> APPROUVÉE
+              const h6 = document.querySelector("#" + idCardIdee + " h6")
+              h6.textContent = "Approuvée"
+              h6.classList.remove("text-red")
+              h6.classList.add("text-green")
+            }
+          })
+      })
+    
+    btnAnnuler.addEventListener("click", (event) => {
+        //ON RECUPÈRE l'ID DE L'IDÉE
         fetch(API_URL + "?id=eq." + donnee.id, {
-            method : "PATCH",
-            headers : {
-                apikey : API_KEY,
-                "Content-Type" : "application/json",
-                Prefer : "return=representation"
-            },
-            body : JSON.stringify({statut:false}),
+          method: "PATCH",
+          headers: {
+            apikey: API_KEY,
+            "Content-Type": "application/json",
+            Prefer: "return=representation",
+          },
+          body: JSON.stringify({ statut: false }),
         })
-    })
-}
+          .then((response) => response.json())
+          .then((data) => {
+            if (data[0].statut === false) {
+              //ON RECUPÈRE LA CARTE CONCERNÉE
+              const divCard = document.getElementById(idCardIdee)
+              divCard.style.border = "1px solid #ce0033"
+              btnAnnuler.style.visibility = "hidden"
+              btnValider.style.visibility = "visible"
+    
+              //CHANGE LE TEXT DU H6
+              const h6 = document.querySelector("#" + idCardIdee + " h6")
+              h6.textContent = "Refusée"
+              h6.classList.remove("text-green")
+              h6.classList.add("text-red")
+            }
+          })
+      })
+    }
 
-// contrôle nombre de caratères textarea
+// CONTRÔLE NOMBRE DE CARACTÈRES DU TEXTAREA
 
 inputDescription.addEventListener("input", (event) => {
     const longueurMax = 130
@@ -155,7 +193,7 @@ inputDescription.addEventListener("input", (event) => {
     compteurText.textContent = longueurSaisi
     restantText.textContent = " Il vous reste " + reste
   
-    //changer couleur
+    //CHANGER LA COULEUR DU COMPTEUR
   
     if (reste < 0) {
       paragraphCompteur.style.color = "#CE0033"
@@ -170,7 +208,7 @@ inputDescription.addEventListener("input", (event) => {
   })
 
 //RECUPÉRATION ET AFFICHAGE DES DONNÉES VIA API 
-window.addEventListener("DOMContentLoaded", (event) => {
+listeDesIdees.addEventListener("click", (event) => {
     fetch(API_URL, {
             method : "GET",
             headers : {
@@ -184,3 +222,42 @@ window.addEventListener("DOMContentLoaded", (event) => {
       })
     })
 })
+
+// BOUTON APPROUVÉE / REFUSÉÉ POUR FILTRER
+ideeApprouvee.addEventListener("click", (e) => {
+    e.preventDefault()
+    proposition.innerHTML = ""
+    fetch(API_URL + "?statut=eq." + true, {
+            method : "GET",
+            headers : {
+            apikey: API_KEY,
+        },
+    })
+    .then((response) => response.json())
+    .then((idees) => {
+      idees.forEach((donnee) => {
+        creerCarte(donnee)
+      })
+    })
+    
+})
+
+ideeRefusee.addEventListener("click", (e) => {
+    e.preventDefault()
+    proposition.innerHTML = ""
+    fetch(API_URL + "?statut=eq." + false, {
+            method : "GET",
+            headers : {
+            apikey: API_KEY,
+        },
+    })
+    .then((response) => response.json())
+    .then((idees) => {
+      idees.forEach((donnee) => {
+        creerCarte(donnee)
+      })
+    })
+    
+})
+
+

@@ -9,31 +9,35 @@
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
         />
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" 
+            href="style.css">
         <!--script src="script.js" defer></script-->
         <title>From scratch | Boite à idée</title>
     </head>
     <body>
-        
         <div class="container">
             <h1 class="text-center py-3">BOITE A IDEE</h1>
-            <div class="row">
-                <div class="col-lg-6">
-                    <form action="POST">
+            <div class="row mb-2">
+                <div class="col">
+                    <form action="index.html" method="POST">
                         <div class="mb-3">
-                          <label for="titre" class="form-label">Titre</label>
-                          <input type="text" class="form-control" id="titre" aria-describedby="">
+                            <label for="titre" class="form-label">Titre</label>
+                            <input type="text" class="form-control" id="titre" aria-describedby="titreHelp">
+                            
+                            <div id="titreHelp" class="form-text">
+                                Merci de donner un titre clair pour la
+                                description
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <div class="form-floating">
+                            <label for="description" class="form-label"
+                                >Description</label>
                                 <textarea
                                     class="form-control"
                                     id="description"
                                     name="description"
                                     rows="3">
                                 </textarea>
-                                <label for="description">Description</label>
-                            </div>
                             <p id="limite-text">
                                   Contenu saisi : <span id="text-progress">00</span> /130
                             </p>
@@ -42,15 +46,25 @@
                         <button type="submit" class="btn btn-danger float-end" style="background-color: #CE0033" id="btn-description">envoyer</button>
                     </form>
                 </div>
-                <div class="col-lg-6">
+                <div class="col">
                     <img src="img/undraw_ideas_s70l.png" class="w-75" alt="">
                 </div>
             </div>
 
-           <h3>La liste des propositions</h3>
-            <div class="row" id="proposition">
-                
+            <button type="submit" class="btn btn-primary" style="background-color: blue" id="listeIdee">Liste des idées</button>
+            <button type="submit" class="btn btn-secondary" style="background-color: #198754" id="btn-les-approuvees">Approuvée</button>
+            <button type="submit" class="btn btn-danger" style="background-color: #CE0033" id="btn-les-refusees">Refusée</button>
+
+            <div class="container">
+                <h3>La liste des propositions</h3>
+                <div class="row" id="proposition"></div>
             </div>
+
+            <!-- <div class="container">
+                <h3>Soit :</h3>
+                <div id="pourcentage"></div>
+            </div> -->
+
         </div>
         <script src="script.js"></script>
     </body>
