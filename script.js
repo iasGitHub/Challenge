@@ -12,7 +12,7 @@ const ideeRefusee = document.getElementById("btn-les-refusees")
 
 
 
-/*tableau_idee.forEach((idees)=>{
+/*tableau_idee.forEach((idees)=>{œ
     creerCarte(idees)
 })*/
 
@@ -205,11 +205,13 @@ inputDescription.addEventListener("input", (event) => {
       paragraphCompteur.style.color = "#00000"
       btnDescription.disabled = false
     }
-  })
+})
 
 //RECUPÉRATION ET AFFICHAGE DES DONNÉES VIA API 
 listeDesIdees.addEventListener("click", (event) => {
-    fetch(API_URL, {
+  proposition.innerHTML = ""
+  event.preventDefault()  
+  fetch(API_URL, {
             method : "GET",
             headers : {
             apikey: API_KEY,
